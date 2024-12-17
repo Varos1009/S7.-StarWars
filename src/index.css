@@ -13,56 +13,90 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
+body,
+html {
   margin: 0;
-  display: flex;
-  place-items: center;
+  padding: 0;
+  background-image: url('./assets/starnight.jpg');
+  background-color: black;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   min-width: 320px;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.nav-tabs,
+.log {
+  position: relative;
+  z-index: 10;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.nav-link.active.lightBorder,
+.list {
+  border-bottom: #f4e6ad 3px solid !important;
+  box-shadow: 1px 4px 6px rgba(255, 193, 7, 0.5) !important;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.border-start,
+.card {
+  font-family: "Audiowide", sans-serif;
+  border-left: #f4e6ad 3px solid !important;
+  box-shadow: 1px 0px 10px 0px rgba(255, 193, 7, 0.5) !important;
+}
+
+.star-wars {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  height: 1000px;
+  color: #feda4a;
+  font-family: 'Pathway Gothic One', sans-serif;
+  font-size: 500%;
+  font-weight: 600;
+  letter-spacing: 6px;
+  line-height: 150%;
+  perspective: 500px;
+  text-align: justify;
+}
+
+.crawl {
+  position: relative;
+  top: 9999px;
+  transform-origin: 50% 100%;
+  animation: crawl 60s linear;
+  z-index: 0;
+}
+
+.crawl>.title {
+  font-size: 90%;
+  text-align: center;
+}
+
+@keyframes crawl {
+  0% {
+    top: 0;
+    transform: rotateX(20deg) translateZ(0);
   }
-  a:hover {
-    color: #747bff;
+
+  100% {
+    top: -6000px;
+    transform: rotateX(25deg) translateZ(-2500px);
   }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+
+.list-group-item {
+  border: none !important;
+  background: transparent !important;
+}
+
+
+.intro {
+  border: #f4e6ad 3px solid !important;
+  box-shadow: 0 0 6px 5px rgba(255, 193, 7, 0.5) !important;
+}
+
+.card-body,
+h5 {
+  color: #bebebc !important;
 }
