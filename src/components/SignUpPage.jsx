@@ -1,6 +1,6 @@
 import React, { useState } from "preact/compat";
 import { useNavigate } from "react-router-dom";
-import Register from "../firebase/Auth";
+import {Register} from "../firebase/Auth";
 
 
 const SignUpPage = () => {

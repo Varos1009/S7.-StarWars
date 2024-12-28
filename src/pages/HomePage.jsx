@@ -3,11 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { StarshipContext } from '../context/StarshipContext';
 import SwLogo from '../assets/starwars.png';
 import ImageAfterIntro from '../assets/star-wars-wallpaper.jpg';
+import { signOut } from 'firebase/auth';
+import { useAuth } from '../context/AuthContext';
+import { auth } from '../firebase/firebase';
 
 const HomePage = () => {
 
     const navigate = useNavigate();
 
+    const { currentUser } = useAuth();
     const { starships, fetchStarships, nextPage } = useContext(StarshipContext);
     const [activeTab, setActiveTab] = useState(localStorage.getItem('activeTab') || 'starships');
     const [showImage, setShowImage] = useState(false);
@@ -41,6 +45,15 @@ const HomePage = () => {
         }
     }, [activeTab]);
 
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate("/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+        }
+    };
+
 
 
     return (
@@ -50,8 +63,15 @@ const HomePage = () => {
                     <img src={SwLogo} alt="Star Wars Logo" className="w-100" />
                 </div>
                 <div className="log d-flex flex-column flex-md-row justify-content-center float-end align-self-start mt-3">
-                    <h5 className="log me-3 bg-black" type="button" onClick={() => navigate("/login")}>LOGIN</h5>
-                    <h5 className="log bg-black" type="button" onClick={() => navigate("/register")}>SIGN UP</h5>
+                    {currentUser ? (
+                        <h5 className="log  bg-black" type="button" onClick={handleLogout}>LOGOUT</h5>
+                    ) : (
+                        <>
+                            <h5 className="log me-3 bg-black" type="button" onClick={() => navigate("/login")}>LOGIN</h5>
+                            <h5 className="log bg-black" type="button" onClick={() => navigate("/register")}>SIGN UP</h5>
+
+                        </>
+                    )}
                 </div>
             </div>
             <div className="d-flex justify-content-center border border-secondary mb-3">
@@ -112,25 +132,36 @@ const HomePage = () => {
 
                 )}
                 {activeTab === 'starships' && (
-                    <ul className="list-group bg-transparent">
-                        {starships.map((ship, index) => (
-                            <li
-                                className="list-group-item border-0 bg-transparent w-75 m-auto"
-                                key={`${ship.id}-${index}`}
-                                onClick={() => navigate(`/ship/${ship.id}`, { state: { activeTab: 'starships' } })}
-                                style={{ cursor: 'pointer' }}>
-                                <div className="card mb-3 bg-dark">
-                                    <div className="card-body">
-                                        <h5 className="card-title">{ship.name}</h5>
-                                        <p className="card-text">Model: {ship.model}</p>
-                                    </div>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
+                    <>
+                        {!currentUser ? (
+                            <div className="card card-body bg-dark text-center w-50 m-auto my-5">
+                                <h5 className="text-danger">Please LOGIN to view the STARSHIPS.</h5>
+                            </div>
+                        ) : (
+                            <ul className="list-group bg-transparent">
+                                {starships.map((ship, index) => (
+                                    <li
+                                        className="list-group-item border-0 bg-transparent w-75 m-auto"
+                                        key={`${ship.id}-${index}`}
+                                        onClick={() =>
+                                            navigate(`/ship/${ship.id}`, { state: { activeTab: 'starships' } })
+                                        }
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        <div className="card mb-3 bg-dark">
+                                            <div className="card-body">
+                                                <h5 className="card-title">{ship.name}</h5>
+                                                <p className="card-text">Model: {ship.model}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </>
                 )}
             </div>
-            {activeTab === 'starships' && nextPage && (<div className="d-flex justify-content-center  my-3">
+            {activeTab === 'starships' && currentUser && nextPage && (<div className="d-flex justify-content-center  my-3">
                 <h4 className="list d-flex mb-0 p-2 border border-secondary text-white"
                     type="button"
                     onClick={handleNextPage}>

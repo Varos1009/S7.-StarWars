@@ -4,10 +4,12 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "fire
 
 
 export const Register = async (email, password) => {
-    return await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await signOut(auth);
+    return userCredential.user; 
 };
 
-export default async function Login(email, password) {
+export const  Login = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 }
 
