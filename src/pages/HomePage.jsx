@@ -8,19 +8,20 @@ import { useAuth } from '../context/AuthContext';
 import { auth } from '../firebase/firebase';
 
 const HomePage = () => {
-
     const navigate = useNavigate();
+
 
     const { currentUser } = useAuth();
     const { starships, fetchStarships, nextPage } = useContext(StarshipContext);
-    const [activeTab, setActiveTab] = useState(localStorage.getItem('activeTab') || 'starships');
+    const savedTab = localStorage.getItem('activeTab');
+    const [activeTab, setActiveTab] = useState(savedTab || 'home');
     const [showImage, setShowImage] = useState(false);
+
 
 
     useEffect(() => {
         localStorage.setItem('activeTab', activeTab);
     }, [activeTab]);
-
 
     useEffect(() => {
         if (activeTab === 'starships' && starships.length === 0) {
@@ -54,22 +55,19 @@ const HomePage = () => {
         }
     };
 
-
-
     return (
         <div>
-            <div className="container d-flex  justify-content-between  align-items-center mx-auto mt-3 mb-3 mb-md-1">
-                <div className=" logoStar w-25 position-relative z-1" >
+            <div className="container d-flex justify-content-between align-items-center mx-auto mt-3 mb-3 mb-md-1">
+                <div className="logoStar w-25 position-relative z-1">
                     <img src={SwLogo} alt="Star Wars Logo" className="w-100" />
                 </div>
                 <div className="log d-flex flex-column flex-md-row justify-content-center float-end align-self-start mt-3">
                     {currentUser ? (
-                        <h5 className="log  bg-black" type="button" onClick={handleLogout}>LOGOUT</h5>
+                        <h5 className="log bg-black" type="button" onClick={handleLogout}>LOGOUT</h5>
                     ) : (
                         <>
                             <h5 className="log me-3 bg-black" type="button" onClick={() => navigate("/login")}>LOGIN</h5>
                             <h5 className="log bg-black" type="button" onClick={() => navigate("/register")}>SIGN UP</h5>
-
                         </>
                     )}
                 </div>
@@ -98,11 +96,8 @@ const HomePage = () => {
                     <>
                         {!showImage && (
                             <section className="star-wars">
-
                                 <div className="crawl">
-
                                     <p className="text-center mb-3">STAR WARS</p>
-
                                     <p>
                                         A long time ago in a galaxy far, far away....
 
@@ -115,21 +110,16 @@ const HomePage = () => {
                                         Now, in the depths of uncharted space, a secret base shelters the last remnants of the Alliance. From here, the spark of rebellion burns brighter, as brave freedom fighters prepare to embark on a desperate mission that could decide the fate of the galaxy....
 
                                         The adventure begins!
-
                                     </p>
-
                                 </div>
-
                             </section>
-
                         )}
                         {showImage && (
-                            <div className="d-flex justify-content-center  ">
-                                <img src={ImageAfterIntro} alt="After Intro" className="intro w-50 w-lg-75 " />
+                            <div className="d-flex justify-content-center">
+                                <img src={ImageAfterIntro} alt="After Intro" className="intro w-50 w-lg-75" />
                             </div>
                         )}
                     </>
-
                 )}
                 {activeTab === 'starships' && (
                     <>
@@ -161,13 +151,15 @@ const HomePage = () => {
                     </>
                 )}
             </div>
-            {activeTab === 'starships' && currentUser && nextPage && (<div className="d-flex justify-content-center  my-3">
-                <h4 className="list d-flex mb-0 p-2 border border-secondary text-white"
-                    type="button"
-                    onClick={handleNextPage}>
-                    View More
-                </h4>
-            </div>)}
+            {activeTab === 'starships' && currentUser && nextPage && (
+                <div className="d-flex justify-content-center my-3">
+                    <h4 className="list d-flex mb-0 p-2 border border-secondary text-white"
+                        type="button"
+                        onClick={handleNextPage}>
+                        View More
+                    </h4>
+                </div>
+            )}
         </div>
     );
 };
